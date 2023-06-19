@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magic Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <nav class="bg-purple-700 py-6 flex justify-around">
+        <a href="index.html" id="form-link" class="hover:text-green-500 text-white">Form</a>
+        <a href="history.html" id="history-link" class="hover:text-green-500 text-white">History</a>
+    </nav>
+    <main class="flex flex-col max-w-xs mx-auto gap-4 mt-12">
+
+    </main>
+</body>
+</html>
+
+<script>
+    const arr = JSON.parse(localStorage.getItem("formData"));
+
+    arr.forEach((item, index) => {
+        const cardEl = document.createElement("div");
+        cardEl.id = "cardData-" + index;
+        cardEl.classList.add("submit-history-card", "text-center", "bg-gray-200", "rounded-lg", "p-6", "w-full");
+        document.querySelector("main").append(cardEl);
+
+        Object.entries(item).forEach((i) => {
+            const el = document.createElement("p");
+            el.classList.add("font-bold");
+            switch(i[0]) {
+                case "firstName":
+                    el.classList.add("card-first-name");
+                    break;
+                case "lastName":
+                    el.classList.add("card-last-name");
+                    break;
+                default:
+                    el.classList.add("card-" + i[0]);
+            }
+            el.innerText = i[1];
+            cardEl.appendChild(el);
+        });
+
+        const deleteEl = document.createElement("button");
+        deleteEl.innerText = "Delete";
+        deleteEl.classList.add("delete-button", "bg-red-400", "hover:bg-red-600", "p-3", "text-white", "rounded-lg");
+        deleteEl.addEventListener("click", () => {
+            const id = deleteEl.parentNode.id.replace("cardData-", "");
+
+            arr.splice(id, 1)
+
+            console.log(arr);
+            localStorage.setItem("formData", JSON.stringify(arr));
+            document.querySelector("main").removeChild(deleteEl.parentNode);
+            console.log(arr);
+        })
+        cardEl.appendChild(deleteEl);
+    })
+</script>
