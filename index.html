@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magic Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <nav class="bg-purple-700 py-6 flex justify-around">
+        <a href="index.html" id="form-link" class="hover:text-green-500 text-white">Form</a>
+        <a href="history.html" id="history-link" class="hover:text-green-500 text-white">History</a>
+    </nav>
+    <form action="" class="flex flex-col max-w-xs mx-auto gap-4 mt-12">
+        <label for="first-name" class="font-bold">First name</label>
+        <input type="text" id="first-name" name="first-name" class="border border-gray-300 rounded-lg p-2 text-sm">
+
+        <label for="last-name" class="font-bold">Last name</label>
+        <input type="text" id="last-name" name="last-name" class="border border-gray-300 rounded-lg p-2 text-sm">
+
+        <label for="email" class="font-bold">Email</label>
+        <input type="text" id="email" name="email" class="border border-gray-300 rounded-lg p-2 text-sm">
+
+        <label for="phone" class="font-bold">Phone</label>
+        <input type="text" id="phone" name="phone" class="border border-gray-300 rounded-lg p-2 text-sm">
+
+        <label for="company" class="font-bold">Company</label>
+        <input type="text" id="company" name="company" class="border border-gray-300 rounded-lg p-2 text-sm">
+
+        <label for="address" class="font-bold">Address</label>
+        <input type="text" id="address" name="address" class="border border-gray-300 rounded-lg p-2 text-sm">
+
+        <button type="submit" id="submit-button" class="mt-4 bg-purple-400 p-4 rounded-lg text-white font-bold hover:bg-purple-700">Submit form</button>
+    </form>
+
+    <script>
+        let arr = [];
+
+        if(!localStorage.getItem("formData"))
+            localStorage.setItem("formData", JSON.stringify(arr))
+
+        console.log(arr);
+        console.log(JSON.parse(localStorage.getItem("formData")));
+
+        const firstNameEl = document.getElementById("first-name");
+        const lastNameEl = document.getElementById("last-name");
+        const emailEl = document.getElementById("email");
+        const phoneEl = document.getElementById("phone");
+        const companyEl = document.getElementById("company");
+        const addressEl = document.getElementById("address");
+        const submitEl = document.getElementById("submit-button");
+
+        const clearForm = () => {
+            localStorage.setItem("firstName", "");
+            localStorage.setItem("lastName", "");
+            localStorage.setItem("email", "");
+            localStorage.setItem("phone", "");
+            localStorage.setItem("company", "");
+            localStorage.setItem("address", "");
+            firstNameEl.value = "";
+            lastNameEl.value = "";
+            emailEl.value = "";
+            phoneEl.value = "";
+            companyEl.value = "";
+            addressEl.value = "";
+        }
+
+        const updateForm = () => {
+            if(localStorage.getItem("firstName"))
+                firstNameEl.value = localStorage.getItem("firstName");
+            if(localStorage.getItem("lastName"))
+                lastNameEl.value = localStorage.getItem("lastName");
+            if(localStorage.getItem("email"))
+                emailEl.value = localStorage.getItem("email");
+            if(localStorage.getItem("phone"))
+                phoneEl.value = localStorage.getItem("phone");
+            if(localStorage.getItem("company"))
+                companyEl.value = localStorage.getItem("company");
+            if(localStorage.getItem("address"))
+                addressEl.value = localStorage.getItem("address");
+        }
+        updateForm();
+
+        setInterval(updateForm, 100);
+
+        firstNameEl.addEventListener("input", () => {
+            localStorage.setItem("firstName", firstNameEl.value);
+        });
+        lastNameEl.addEventListener("input", () => {
+            localStorage.setItem("lastName", lastNameEl.value);
+        });
+        emailEl.addEventListener("input", () => {
+            localStorage.setItem("email", emailEl.value);
+        });
+        phoneEl.addEventListener("input", () => {
+            localStorage.setItem("phone", phoneEl.value);
+        });
+        companyEl.addEventListener("input", () => {
+            localStorage.setItem("company", companyEl.value);
+        });
+        addressEl.addEventListener("input", () => {
+            localStorage.setItem("address", addressEl.value);
+        });
+
+        const validateElements = () => {
+            return !!(firstNameEl.value && lastNameEl.value && emailEl.value && phoneEl.value && companyEl.value && addressEl.value);
+        }
+
+        submitEl.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (validateElements()) {
+                let arr = JSON.parse(localStorage.formData);
+                arr.push({ firstName: firstNameEl.value, lastName: lastNameEl.value, email: emailEl.value, phone: phoneEl.value, company: companyEl.value, address: addressEl.value});
+                localStorage.setItem("formData", JSON.stringify(arr));
+                clearForm();
+            } else {
+                console.log("Invalid");
+            }
+        })
+    </script>
+</body>
+</html>
